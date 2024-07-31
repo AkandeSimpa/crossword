@@ -209,6 +209,27 @@ class CrosswordState extends State<Crossword>
     return widget.lineDecoration!.lineGradientColors[index];
   }
 
+  void clearSelection() {
+    setState(() {
+      // Clear the current selection
+      startPoint = null;
+      endPoint = null;
+      
+      // Remove the last line if it exists
+      if (lineList.isNotEmpty) {
+        WordLine lastLine = lineList.removeLast();
+        
+        // Remove the offsets of the last line from selectedOffsets
+        selectedOffsets.removeWhere((offset) => lastLine.getTotalOffsets.contains(offset));
+      }
+      
+      // Clear the current word
+      if (widget.onLineUpdate != null) {
+        widget.onLineUpdate!("");
+      }
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Column(
