@@ -398,7 +398,7 @@ class CrosswordState extends State<Crossword>
                         textStyle: widget.textStyle,
                         spacing: widget.spacing,
                         hints: widget.hints),
-                    size: Size(letters.length * widget.spacing.dx,
+                        size: Size(letters.length * widget.spacing.dx,
                         letters.first.length * widget.spacing.dy),
                   );
                 },
