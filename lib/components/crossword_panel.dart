@@ -229,6 +229,46 @@ class CrosswordState extends State<Crossword>
       }
     });
   }
+
+  void clearIncorrectSelections() {
+    setState(() {
+      // Iterate through the lineList in reverse order
+      for (int i = lineList.length - 1; i >= 0; i--) {
+        WordLine line = lineList[i];
+        String word = line.word;
+
+        // Check if the word is not in the hints (i.e., it's incorrect)
+        if (!widget.hints.contains(word)) {
+          // Remove the incorrect line
+          lineList.removeAt(i);
+          
+          // Remove the offsets of the incorrect line from selectedOffsets
+          selectedOffsets.removeWhere((offset) => line.getTotalOffsets.contains(offset));
+        }
+      }
+
+      // Clear the current selection if it's incorrect
+      if (startPoint != null && endPoint != null) {
+        WordLine currentSelection = WordLine(
+          offsets: [startPoint!, endPoint!],
+          colors: colors,
+          letters: letters,
+          acceptReversedDirection: widget.acceptReversedDirection!,
+        );
+        
+        if (!widget.hints.contains(currentSelection.word)) {
+          startPoint = null;
+          endPoint = null;
+          
+          // Clear the current word
+          if (widget.onLineUpdate != null) {
+            widget.onLineUpdate!("");
+          }
+        }
+      }
+    });
+  }
+
   
   @override
   Widget build(BuildContext context) {
